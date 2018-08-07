@@ -17,11 +17,13 @@ class UDPHandler(socketserver.BaseRequestHandler):
         socket = self.request[1]
         # Ignore buffer headers, get the data following the byte header (1, or \x01).
         decoded_data = data.decode(encoding='utf-8', errors='ignore').split('\x01')[1:]
-        log.debug("%s: %r" % (self.client_address[0], decoded_data))
         for data_json in decoded_data:
             data_object = json.loads(data_json)
-            log.debug("DATA RECEIVED: %s" % (data_object,))
-        socket.sendto(data.upper(), self.client_address)
+            log.debug("%s: %r" % (self.client_address[0], data_object))
+            self.send_to(socket, self.client_address, data_json)
+
+    def send_to(self, socket, address, message):
+        socket.sendto((message).encode(), address)
 
     def finish(self):
         """ Called after the handle() method to perform any clean-up actions required. """
