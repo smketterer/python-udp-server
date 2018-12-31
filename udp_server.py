@@ -1,7 +1,4 @@
-import logging
-import socketserver
-import struct
-import json
+import logging, socketserver, struct, json
 
 log = logging.getLogger('udp_server')
 FORMAT_CONS = '%(asctime)s %(name)-12s %(levelname)-5s %(message)s'
